@@ -1,13 +1,16 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import 'package:flutter_common_components/src/utils/icons_utils.dart';
 
 class CommonTextField extends StatefulWidget {
   const CommonTextField({
-    super.key,
+    Key? key,
     this.controller,
     this.keyboardType,
     this.labelText,
+    this.hintText,
     this.obscureText = false,
     this.inputFormatters,
     this.validator,
@@ -16,10 +19,12 @@ class CommonTextField extends StatefulWidget {
     this.readOnly = false,
     this.onTap,
     this.errorText,
-  });
+  }) : super(key: key);
   final TextEditingController? controller;
   final TextInputType? keyboardType;
   final String? labelText;
+  final String? hintText;
+
   final bool obscureText;
   final List<TextInputFormatter>? inputFormatters;
   final String? Function(String?)? validator;
@@ -50,6 +55,7 @@ class _CommonTextFieldState extends State<CommonTextField> {
       decoration: InputDecoration(
         errorText: widget.errorText,
         labelText: widget.labelText,
+        hintText: widget.hintText,
         suffixIcon: widget.obscureText
             ? Padding(
                 padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),

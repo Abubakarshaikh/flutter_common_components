@@ -29,18 +29,18 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      // theme: AppTheme(
-      //   primary: Colors.green,
-      //   textTheme: GoogleFontsThemeUtil.poppinsTextTheme,
-      // ).standard(),
-      theme: ThemeData.light()
-          .copyWith(colorScheme: ColorScheme.fromSwatch(), extensions: [
-        WidgetToolkitTheme.light(),
-      ]),
-      darkTheme: ThemeData.dark()
-          .copyWith(colorScheme: ColorScheme.fromSwatch(), extensions: [
-        WidgetToolkitTheme.dark(),
-      ]),
+      theme: ThemeData.light().copyWith(
+        colorScheme: ColorScheme.fromSwatch(),
+        extensions: [
+          WidgetToolkitTheme.light(),
+        ],
+      ),
+      darkTheme: ThemeData.dark().copyWith(
+        colorScheme: ColorScheme.fromSwatch(),
+        extensions: [
+          WidgetToolkitTheme.dark(),
+        ],
+      ),
       home: const ExampleScreen(),
     );
   }
