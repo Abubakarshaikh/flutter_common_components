@@ -1,6 +1,6 @@
 name: flutter_common_components
 description: A Flutter package that provides customizable widgets for creating beautiful user interfaces. It includes responsive layouts, animated components, and theme-aware designs.
-version: 0.0.1
+version: 1.0.1
 homepage:
 repository: https://github.com/Abubakarshaikh/flutter_common_components
 

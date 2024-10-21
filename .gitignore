@@ -3,7 +3,6 @@
 *.log
 *.pyc
 *.swp
-.DS_Store
 .atom/
 .buildlog/
 .history
@@ -27,3 +26,5 @@ migrate_working_dir/
 **/doc/api/
 .dart_tool/
 build/
+
+# Ignore macOS system files

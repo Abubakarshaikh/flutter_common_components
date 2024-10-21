@@ -1,12 +1,11 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 import 'package:flutter_common_components/src/utils/icons_utils.dart';
 
 class CommonTextField extends StatefulWidget {
   const CommonTextField({
-    Key? key,
+    super.key,
     this.controller,
     this.keyboardType,
     this.labelText,
@@ -19,7 +18,7 @@ class CommonTextField extends StatefulWidget {
     this.readOnly = false,
     this.onTap,
     this.errorText,
-  }) : super(key: key);
+  });
   final TextEditingController? controller;
   final TextInputType? keyboardType;
   final String? labelText;
