@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_common_components/flutter_common_components.dart';
-import 'package:flutter_common_components_example/examples/common_gradient_fill_button_example.dart';
-import 'package:flutter_common_components_example/examples/common_icon_text_button_example.dart';
-import 'package:flutter_common_components_example/examples/common_outline_fill_button_example.dart';
-import 'package:flutter_common_components_example/examples/common_small_button.dart';
-import 'package:flutter_common_components_example/examples/common_snack_bar_example.dart';
-import 'package:flutter_common_components_example/examples/common_text_field_example.dart';
+import 'package:flutter_common_components_example/features/buttons/common_buttons_example.dart';
+import 'package:flutter_common_components_example/features/common_gradient_fill_button_example.dart';
+import 'package:flutter_common_components_example/features/common_icon_text_button_example.dart';
+import 'package:flutter_common_components_example/features/common_outline_fill_button_example.dart';
+import 'package:flutter_common_components_example/features/common_small_button.dart';
+import 'package:flutter_common_components_example/features/snack_bar/common_snack_bar_example.dart';
+import 'package:flutter_common_components_example/features/text_field/common_text_field_example.dart';
+import 'package:flutter_common_components_example/features/contextual_action_bar/contextual_action_bar_screen.dart';
+import 'package:flutter_common_components_example/features/modalsheets/google_tasks_modal_sheet.dart';
 
 void main() {
   runApp(
@@ -132,6 +135,39 @@ class ExampleScreen extends StatelessWidget {
               );
             },
             title: "Icon Text Button",
+          ),
+          CustomElevatedButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const GoogleTasksModalSheet(),
+                ),
+              );
+            },
+            title: "Google Tasks ModalSheet",
+          ),
+          CustomElevatedButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ContextualActionBarScreen(),
+                ),
+              );
+            },
+            title: "Contextual Action Bar",
+          ),
+          CustomElevatedButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const CommonButtonsExample(),
+                ),
+              );
+            },
+            title: "Common Button",
           ),
         ],
       ),

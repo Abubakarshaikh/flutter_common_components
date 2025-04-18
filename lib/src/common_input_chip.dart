@@ -55,15 +55,15 @@ class CommonInputChip extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            AppText.labelSmall(
+            AppText.l3(
               name,
               color: isSelected ? forgroundColorActive : forgroundColorInActive,
             ),
             ConstSizedBox.kWidth6,
             if (isSelected) ...<Widget>[
-              AppText.labelSmall(
+              AppText.l3(
                 number > 9 ? '+10' : '$number',
-                fontWeight: FontWeight.w600,
+                // fontWeight: FontWeight.w600,
                 color:
                     isSelected ? forgroundColorActive : forgroundColorInActive,
               ),

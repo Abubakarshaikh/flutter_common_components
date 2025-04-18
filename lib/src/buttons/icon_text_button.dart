@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_common_components/flutter_common_components.dart';
+import 'package:flutter_common_components/flutter_common_components.dart'
+    hide ButtonStyle;
 
 import '../sized_loading_indicator.dart';
 import 'button_color_style.dart';

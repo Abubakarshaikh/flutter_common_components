@@ -12,13 +12,13 @@ class CommonTextFieldExample extends StatelessWidget {
           'Display Components',
         ),
       ),
-      body: const Padding(
-        padding: EdgeInsets.all(24),
+      body: Padding(
+        padding: const EdgeInsets.all(24),
         child: Column(
           children: [
-            CommonTextField(),
-            SizedBox(height: 12),
-            CommonTextField(),
+            CommonTextField.standard(),
+            const SizedBox(height: 12),
+            CommonTextField.standard(),
           ],
         ),
       ),

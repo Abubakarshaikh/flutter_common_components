@@ -39,7 +39,7 @@ class CommonSearchBar extends SearchDelegate<String?> {
   @override
   Widget buildResults(BuildContext context) {
     return Center(
-      child: AppText.titleSmall(query),
+      child: AppText.t3(query),
     );
   }
 

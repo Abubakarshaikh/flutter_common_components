@@ -27,8 +27,9 @@ class _CommonSnackbarExampleState extends State<CommonSnackbarExample> {
         children: [
           ElevatedButton(
             onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const CommonSnackBar().build(context) as SnackBar,
+              CommonSnackBar.show(
+                context: context,
+                message: 'Testing snackbar',
               );
             },
             child: const Text('Simple'),
