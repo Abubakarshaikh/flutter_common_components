@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_common_components/flutter_common_components.dart';
-import 'package:flutter_common_components_example/features/buttons/common_app_bar.dart';
 
 class CommonButtonsExample extends StatelessWidget {
   const CommonButtonsExample({super.key});

@@ -1,64 +1,43 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_common_components/flutter_common_components.dart';
+import 'package:flutter_common_components/buttons.dart';
 
-class CommonSmallButtonExample extends StatefulWidget {
-  const CommonSmallButtonExample({
-    super.key,
-  });
-
-  @override
-  State<CommonSmallButtonExample> createState() =>
-      _CommonSmallButtonExampleState();
-}
-
-class _CommonSmallButtonExampleState extends State<CommonSmallButtonExample> {
-  @override
-  void initState() {
-    super.initState();
-  }
+class CommonSmallButtonExample extends StatelessWidget {
+  const CommonSmallButtonExample({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Small Button"),
-      ),
+      appBar: AppBar(title: const Text("Small Button")),
       body: ListView(
         padding: const EdgeInsets.all(24),
         children: [
           SmallButton(
             onPressed: () {},
-            icon: Icons.home_work_outlined,
+            icon: const Icon(Icons.home_work_outlined),
           ),
           const SizedBox(height: 12),
           SmallButton(
+            type: SmallButtonType.filled,
             onPressed: () {},
-            icon: Icons.arrow_back,
+            icon: const Icon(Icons.arrow_back),
           ),
           const SizedBox(height: 12),
           SmallButton(
-            state: ButtonStateModel.loading,
+            isLoading: true,
             onPressed: () {},
-            icon: Icons.arrow_back,
+            icon: const Icon(Icons.arrow_back),
+          ),
+          const SizedBox(height: 12),
+          const SmallButton(
+            onPressed: null,
+            icon: Icon(Icons.home),
           ),
           const SizedBox(height: 12),
           SmallButton(
-            state: ButtonStateModel.disabled,
+            type: SmallButtonType.icon,
+            tooltip: "Play",
             onPressed: () {},
-            icon: Icons.home,
-          ),
-          const SizedBox(height: 12),
-          SmallButton(
-            state: ButtonStateModel.pressed,
-            onPressed: () {},
-            icon: Icons.play_arrow,
-          ),
-          const SizedBox(height: 12),
-          SmallButton(
-            tooltip: "Press",
-            state: ButtonStateModel.pressed,
-            onPressed: () {},
-            icon: Icons.play_arrow,
+            icon: const Icon(Icons.play_arrow),
           ),
         ],
       ),

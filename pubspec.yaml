@@ -1,30 +1,25 @@
 name: flutter_common_components
 description: A Flutter package that provides customizable widgets for creating beautiful user interfaces. It includes responsive layouts, animated components, and theme-aware designs.
-version: 1.0.1
+version: 2.0.0
 homepage:
 repository: https://github.com/Abubakarshaikh/flutter_common_components
 
 environment:
-  sdk: ^3.5.2
-  flutter: '>=3.3.0'
+  sdk: ^3.8.0
+  flutter: '>=3.32.0'
 
 dependencies:
-  copy_with_extension: ^5.0.4
   cached_network_image: ^3.4.1
   flutter:
     sdk: flutter
   flutter_svg: ^2.0.10+1
   google_fonts: ^6.2.1
-  theme_tailor_annotation: ^3.0.1
-
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^4.0.0
-  build_runner: ^2.4.12
-  theme_tailor: ^3.0.1
-  copy_with_extension_gen: ^5.0.4
+  path: ^1.9.0
 
 
 # For information on the generic Dart part of this file, see the

@@ -1,44 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_common_components/flutter_common_components.dart';
+import 'package:flutter_common_components/buttons.dart';
 
-class CommonIconTextButtonButtonExample extends StatefulWidget {
-  const CommonIconTextButtonButtonExample({
-    super.key,
-  });
-
-  @override
-  State<CommonIconTextButtonButtonExample> createState() =>
-      _CommonIconTextButtonButtonExampleState();
-}
-
-class _CommonIconTextButtonButtonExampleState
-    extends State<CommonIconTextButtonButtonExample> {
-  @override
-  void initState() {
-    super.initState();
-  }
+class CommonIconTextButtonButtonExample extends StatelessWidget {
+  const CommonIconTextButtonButtonExample({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Icon Text Button"),
-      ),
+      appBar: AppBar(title: const Text("Icon Text Button")),
       body: ListView(
         padding: const EdgeInsets.all(24),
         children: [
           IconTextButton(
-            icon: Icons.abc,
+            icon: const Icon(Icons.abc),
             text: "Test",
             onPressed: () {},
           ),
           const SizedBox(height: 12),
-          IconTextButton(
-            state: ButtonStateModel.disabled,
-            text: "Test",
-            onPressed: () {},
+          const IconTextButton(
+            text: "Disabled",
+            onPressed: null,
           ),
-          const SizedBox(height: 12)
         ],
       ),
     );

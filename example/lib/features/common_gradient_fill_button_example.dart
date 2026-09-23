@@ -1,45 +1,42 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_common_components/flutter_common_components.dart';
+import 'package:flutter_common_components/buttons.dart';
 
-class CommonGradientFillButtonExample extends StatefulWidget {
-  const CommonGradientFillButtonExample({
-    super.key,
-  });
-
-  @override
-  State<CommonGradientFillButtonExample> createState() =>
-      _CommonGradientFillButtonExampleState();
-}
-
-class _CommonGradientFillButtonExampleState
-    extends State<CommonGradientFillButtonExample> {
-  @override
-  void initState() {
-    super.initState();
-  }
+class CommonGradientFillButtonExample extends StatelessWidget {
+  const CommonGradientFillButtonExample({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Small Button"),
-      ),
+      appBar: AppBar(title: const Text("Gradient Fill Button")),
       body: ListView(
         padding: const EdgeInsets.all(24),
         children: [
           GradientFillButton(
-            state: ButtonStateModel.loading,
-            areIconsClose: true,
-            text: "Test",
+            text: "Continue",
+            trailing: const Icon(Icons.arrow_forward),
             onPressed: () {},
           ),
           const SizedBox(height: 12),
           GradientFillButton(
-            state: ButtonStateModel.disabled,
-            text: "Test",
+            isLoading: true,
+            areIconsClose: true,
+            text: "Loading",
             onPressed: () {},
           ),
-          const SizedBox(height: 12)
+          const SizedBox(height: 12),
+          const GradientFillButton(
+            text: "Disabled",
+            onPressed: null,
+          ),
+          const SizedBox(height: 12),
+          GradientFillButton(
+            text: "Custom style",
+            onPressed: () {},
+            style: const GradientFillButtonTheme(
+              gradientStart: Colors.purple,
+              gradientEnd: Colors.orange,
+            ),
+          ),
         ],
       ),
     );

@@ -1,217 +1,124 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_common_components/flutter_common_components.dart';
-import 'package:flutter_common_components/src/utils/padding_utils.dart';
-import 'package:flutter_common_components/src/utils/radius_utils.dart';
 
+import '../foundation/tokens/app_insets.dart';
+import '../foundation/tokens/app_radius.dart';
+import 'app_color_schemes.dart';
+import 'app_fonts.dart';
+
+/// Builds a [ThemeData] from a [ColorScheme].
+///
+/// Components never read [AppTheme] directly; they only read Flutter's
+/// [ThemeData] plus their own optional [ThemeExtension]. Pass those through
+/// [extensions] to restyle a component app-wide.
 class AppTheme {
-  final ColorScheme _colorScheme;
-  final TextTheme _textTheme;
+  const AppTheme({
+    required this.colorScheme,
+    this.textTheme,
+    this.extensions = const <ThemeExtension<dynamic>>[],
+  });
 
-  AppTheme({
-    ColorScheme? colorScheme,
-    Color? primary,
-    Color? onPrimary,
-    Color? surface,
-    Color? onSurface,
+  factory AppTheme.standard({
     TextTheme? textTheme,
-  })  : _colorScheme = colorScheme ??
-            ColorSchemeUtils.kStandardColorScheme.copyWith(
-              primary: primary,
-              onPrimary: onPrimary,
-              surface: surface,
-              onSurface: onSurface,
-            ),
-        _textTheme = textTheme ?? GoogleFontsThemeUtil.openSansTextTheme;
+    Iterable<ThemeExtension<dynamic>> extensions =
+        const <ThemeExtension<dynamic>>[],
+  }) => AppTheme(
+    colorScheme: AppColorSchemes.standard,
+    textTheme: textTheme,
+    extensions: extensions,
+  );
 
-  ThemeData standard() {
-    _colorScheme.copyWith();
-    return ThemeData(
-      iconButtonTheme: kBaseIconButtonTheme,
-      datePickerTheme: const DatePickerThemeData(),
-      colorScheme: _colorScheme,
-      scaffoldBackgroundColor: ColorSchemeUtils.kStandardColorScheme.surface,
-      useMaterial3: true,
-      appBarTheme: kBaseAppBarTheme,
-      dividerTheme: kBaseDividerThemeData,
-      elevatedButtonTheme: kBaseElevatedButtonThemeData,
-      inputDecorationTheme: kBaseInputDecorationTheme,
-      iconTheme: kBaseIconThemeData,
-      tabBarTheme: kBaseTabBarTheme,
-      progressIndicatorTheme: kBaseProgressIndicatorThemeData,
-      listTileTheme: kBaseListTileThemeData,
-      drawerTheme: kBaseDrawerThemeData,
-      textButtonTheme: kBaseTextButtonThemeData,
-      textTheme: _textTheme,
-      checkboxTheme: kBaseCheckboxTheme,
-    );
-  }
-
-  ThemeData dark() {
-    return ThemeData(
-      iconButtonTheme: kBaseIconButtonTheme,
-      dialogBackgroundColor: ColorSchemeUtils.kDarkColorScheme.secondary,
-      bottomNavigationBarTheme: kbaseBottomNavigationBarTheme,
-      colorScheme: _colorScheme,
-      useMaterial3: true,
-      appBarTheme: kBaseAppBarTheme,
-      dividerTheme: kBaseDividerThemeData,
-      elevatedButtonTheme: kBaseElevatedButtonThemeData,
-      inputDecorationTheme: kBaseInputDecorationTheme,
-      iconTheme: kBaseIconThemeData,
-      tabBarTheme: kBaseTabBarTheme,
-      progressIndicatorTheme: kBaseProgressIndicatorThemeData,
-      listTileTheme: kBaseListTileThemeData,
-      drawerTheme: kBaseDrawerThemeData,
-      textButtonTheme: kBaseTextButtonThemeData,
-      textTheme: _textTheme.apply(
-        bodyColor: ColorSchemeUtils.kCharcoalColorScheme.onSurface,
-        displayColor: ColorSchemeUtils.kCharcoalColorScheme.onSurface,
-      ),
-      checkboxTheme: kBaseCheckboxTheme,
-    );
-  }
-
-  ThemeData charcoal({
+  factory AppTheme.dark({
     TextTheme? textTheme,
-  }) {
-    return ThemeData(
-      iconButtonTheme: kBaseIconButtonTheme,
-      dialogBackgroundColor: ColorSchemeUtils.kCharcoalColorScheme.secondary,
-      bottomNavigationBarTheme: kbaseBottomNavigationBarTheme,
-      colorScheme: _colorScheme,
-      useMaterial3: true,
-      appBarTheme: kBaseAppBarTheme,
-      dividerTheme: kBaseDividerThemeData,
-      elevatedButtonTheme: kBaseElevatedButtonThemeData,
-      inputDecorationTheme: kBaseInputDecorationTheme,
-      iconTheme: kBaseIconThemeData,
-      tabBarTheme: kBaseTabBarTheme,
-      progressIndicatorTheme: kBaseProgressIndicatorThemeData,
-      listTileTheme: kBaseListTileThemeData,
-      drawerTheme: kBaseDrawerThemeData,
-      textButtonTheme: kBaseTextButtonThemeData,
-      textTheme: _textTheme.apply(
-        bodyColor: ColorSchemeUtils.kCharcoalColorScheme.onSurface,
-        displayColor: ColorSchemeUtils.kCharcoalColorScheme.onSurface,
-      ),
-      checkboxTheme: kBaseCheckboxTheme,
+    Iterable<ThemeExtension<dynamic>> extensions =
+        const <ThemeExtension<dynamic>>[],
+  }) => AppTheme(
+    colorScheme: AppColorSchemes.dark,
+    textTheme: textTheme,
+    extensions: extensions,
+  );
+
+  factory AppTheme.charcoal({
+    TextTheme? textTheme,
+    Iterable<ThemeExtension<dynamic>> extensions =
+        const <ThemeExtension<dynamic>>[],
+  }) => AppTheme(
+    colorScheme: AppColorSchemes.charcoal,
+    textTheme: textTheme,
+    extensions: extensions,
+  );
+
+  final ColorScheme colorScheme;
+
+  /// Defaults to [AppTextThemes.openSans].
+  final TextTheme? textTheme;
+
+  final Iterable<ThemeExtension<dynamic>> extensions;
+
+  ThemeData build() {
+    final scheme = colorScheme;
+    final inputBorder = OutlineInputBorder(
+      borderRadius: const BorderRadius.all(AppRadius.k2),
+      borderSide: BorderSide(width: 0.6, color: scheme.outline),
     );
-  }
 
-  BottomNavigationBarThemeData get kbaseBottomNavigationBarTheme =>
-      const BottomNavigationBarThemeData();
-
-  IconThemeData get kBaseIconThemeData => IconThemeData(
-        color: _colorScheme.onSurface,
-      );
-
-  TabBarTheme get kBaseTabBarTheme => TabBarTheme(
-        indicatorSize: TabBarIndicatorSize.label,
-        labelColor: _colorScheme.onPrimary,
-        indicatorColor: _colorScheme.surface,
-      );
-
-  ProgressIndicatorThemeData get kBaseProgressIndicatorThemeData =>
-      ProgressIndicatorThemeData(
-        color: _colorScheme.onPrimary,
-        circularTrackColor: _colorScheme.primary,
-      );
-
-  ListTileThemeData get kBaseListTileThemeData => const ListTileThemeData();
-
-  DrawerThemeData get kBaseDrawerThemeData => DrawerThemeData(
-        backgroundColor: _colorScheme.surface,
-      );
-
-  AppBarTheme get kBaseAppBarTheme => AppBarTheme(
-        backgroundColor: _colorScheme.primary,
-        iconTheme: kBaseIconThemeData.copyWith(
-          color: _colorScheme.onPrimary,
-        ),
-        foregroundColor: _colorScheme.onPrimary,
-      );
-
-  ElevatedButtonThemeData get kBaseElevatedButtonThemeData =>
-      ElevatedButtonThemeData(
+    return ThemeData(
+      useMaterial3: true,
+      colorScheme: scheme,
+      scaffoldBackgroundColor: scheme.surface,
+      textTheme: (textTheme ?? AppTextThemes.openSans).apply(
+        bodyColor: scheme.onSurface,
+        displayColor: scheme.onSurface,
+      ),
+      extensions: extensions,
+      appBarTheme: AppBarTheme(
+        backgroundColor: scheme.primary,
+        foregroundColor: scheme.onPrimary,
+        iconTheme: IconThemeData(color: scheme.onPrimary),
+      ),
+      iconTheme: IconThemeData(color: scheme.onSurface),
+      iconButtonTheme: IconButtonThemeData(
+        style: IconButton.styleFrom(foregroundColor: scheme.onSurface),
+      ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          foregroundColor: _colorScheme.onPrimary,
+          foregroundColor: scheme.onPrimary,
+          backgroundColor: scheme.primary,
+          padding: AppInsets.k12Vertical,
           shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(RadiusUtils.k2Radius),
-          ),
-          backgroundColor: _colorScheme.primary,
-          padding: PaddingUtils.k12Vertical,
-        ),
-      );
-
-  TextButtonThemeData get kBaseTextButtonThemeData => TextButtonThemeData(
-        style: TextButton.styleFrom(
-          foregroundColor: _colorScheme.primary,
-        ),
-      );
-
-  InputDecorationTheme get kBaseInputDecorationTheme => InputDecorationTheme(
-        contentPadding: PaddingUtils.k4Horizontal,
-        focusedBorder: OutlineInputBorder(
-          borderRadius: const BorderRadius.all(RadiusUtils.k2Radius),
-          borderSide: BorderSide(
-            width: 0.6,
-            color: _colorScheme.outline,
+            borderRadius: BorderRadius.all(AppRadius.k2),
           ),
         ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: const BorderRadius.all(RadiusUtils.k2Radius),
-          borderSide: BorderSide(
-            width: 0.6,
-            color: _colorScheme.outline,
-          ),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderRadius: const BorderRadius.all(RadiusUtils.k2Radius),
-          borderSide: BorderSide(
-            width: 0.6,
-            color: _colorScheme.outline,
-          ),
-        ),
-        border: OutlineInputBorder(
-          borderRadius: const BorderRadius.all(RadiusUtils.k2Radius),
-          borderSide: BorderSide(
-            width: 0.6,
-            color: _colorScheme.outline,
-          ),
-        ),
-        labelStyle: const TextStyle(
-          fontWeight: FontWeight.w400,
-          fontSize: 16,
-        ),
-        errorStyle: const TextStyle(
-          fontWeight: FontWeight.w600,
-          fontSize: 12,
-        ),
+      ),
+      textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(foregroundColor: scheme.primary),
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        contentPadding: AppInsets.k4Horizontal,
+        border: inputBorder,
+        enabledBorder: inputBorder,
+        focusedBorder: inputBorder,
+        errorBorder: inputBorder,
+        labelStyle: const TextStyle(fontWeight: FontWeight.w400, fontSize: 16),
         floatingLabelStyle: const TextStyle(
           fontWeight: FontWeight.w400,
           fontSize: 16,
         ),
-      );
-
-  DividerThemeData get kBaseDividerThemeData => DividerThemeData(
-        color: _colorScheme.outline,
-      );
-
-  // TextTheme get kBaseTextTheme => GoogleFonts.openSansTextTheme();
-
-  CheckboxThemeData get kBaseCheckboxTheme {
-    return CheckboxThemeData(
-      checkColor: WidgetStatePropertyAll<Color>(
-        _colorScheme.onPrimary,
+        errorStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 12),
       ),
-    );
-  }
-
-  IconButtonThemeData get kBaseIconButtonTheme {
-    return IconButtonThemeData(
-      style: IconButton.styleFrom(
-        // backgroundColor: _colorScheme.primary,
-        foregroundColor: _colorScheme.onSurface,
+      dialogTheme: DialogThemeData(backgroundColor: scheme.secondary),
+      dividerTheme: DividerThemeData(color: scheme.outline),
+      drawerTheme: DrawerThemeData(backgroundColor: scheme.surface),
+      tabBarTheme: TabBarThemeData(
+        indicatorSize: TabBarIndicatorSize.label,
+        labelColor: scheme.onPrimary,
+        indicatorColor: scheme.surface,
+      ),
+      progressIndicatorTheme: ProgressIndicatorThemeData(
+        color: scheme.onPrimary,
+        circularTrackColor: scheme.primary,
+      ),
+      checkboxTheme: CheckboxThemeData(
+        checkColor: WidgetStatePropertyAll<Color>(scheme.onPrimary),
       ),
     );
   }

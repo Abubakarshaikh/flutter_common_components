@@ -32,18 +32,8 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData.light().copyWith(
-        colorScheme: ColorScheme.fromSwatch(),
-        extensions: [
-          WidgetToolkitTheme.light(),
-        ],
-      ),
-      darkTheme: ThemeData.dark().copyWith(
-        colorScheme: ColorScheme.fromSwatch(),
-        extensions: [
-          WidgetToolkitTheme.dark(),
-        ],
-      ),
+      theme: AppTheme.standard().build(),
+      darkTheme: AppTheme.dark().build(),
       home: const ExampleScreen(),
     );
   }
