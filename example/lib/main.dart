@@ -6,7 +6,7 @@ import 'package:flutter_common_components_example/features/common_icon_text_butt
 import 'package:flutter_common_components_example/features/common_outline_fill_button_example.dart';
 import 'package:flutter_common_components_example/features/common_small_button.dart';
 import 'package:flutter_common_components_example/features/snack_bar/common_snack_bar_example.dart';
-import 'package:flutter_common_components_example/features/text_field/common_text_field_example.dart';
+import 'package:flutter_common_components_example/features/text_field/app_text_field_example.dart';
 import 'package:flutter_common_components_example/features/contextual_action_bar/contextual_action_bar_screen.dart';
 import 'package:flutter_common_components_example/features/modalsheets/google_tasks_modal_sheet.dart';
 
@@ -64,7 +64,7 @@ class ExampleScreen extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const CommonTextFieldExample(),
+                  builder: (context) => const AppTextFieldExample(),
                 ),
               );
             },

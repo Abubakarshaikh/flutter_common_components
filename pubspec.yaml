@@ -13,13 +13,15 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_svg: ^2.0.10+1
+  flutter_typeahead: ^5.2.0
   google_fonts: ^6.2.1
+  intl: ^0.20.2
+  path: ^1.9.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^4.0.0
-  path: ^1.9.0
 
 
 # For information on the generic Dart part of this file, see the

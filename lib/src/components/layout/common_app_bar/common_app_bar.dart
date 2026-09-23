@@ -1,147 +1,357 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-/// A cross-platform app bar widget with support for multiple configurations,
-/// platform-specific styling, and customization options.
+const Color _kContextualSelectColor = Color(0xFF2196F3);
+
+/// A consistent [AppBar] wrapper. Pass [titleWidget] for custom title rows
+/// (e.g. a tappable title with an info icon).
 ///
-/// Usage examples:
 /// ```dart
-/// // Basic app bar with title
+/// CommonAppBar(title: 'Home')
+///
 /// CommonAppBar(
-///   title: 'Home',
+///   title: 'Reports',
+///   onInfoTap: () => showDialog(...),
+///   actions: [IconButton(icon: Icon(Icons.search), onPressed: () {})],
 /// )
 ///
-/// // App bar with actions and leading icon
+/// // Multi-select mode: close button on the left, "Select" on the right.
 /// CommonAppBar(
-///   title: 'Profile',
-///   leadingIcon: Icons.arrow_back,
-///   onLeadingPressed: () => Navigator.pop(context),
-///   actions: [
-///     IconButton(
-///       icon: Icon(Icons.search),
-///       onPressed: () => print('Search pressed'),
-///     ),
-///   ],
-/// )
-///
-/// // Custom app bar with flexible space
-/// CommonAppBar(
-///   title: 'Settings',
-///   flexibleSpace: Container(
-///     decoration: BoxDecoration(
-///       gradient: LinearGradient(
-///         colors: [Colors.blue, Colors.green],
-///       ),
-///     ),
-///   ),
+///   title: '3 selected',
+///   enableContextualActionBar: true,
+///   onClosed: () {},
+///   onSelect: () {},
 /// )
 /// ```
 class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
-  /// Title of the app bar
-  final String? title;
-
-  /// Widget to use as the title (overrides [title] if provided)
-  final Widget? titleWidget;
-
-  /// Leading icon (e.g., back button)
-  final IconData? leadingIcon;
-
-  /// Callback when the leading icon is pressed
-  final VoidCallback? onLeadingPressed;
-
-  /// List of actions (e.g., buttons) to display on the app bar
-  final List<Widget>? actions;
-
-  /// Whether to automatically imply the leading icon
-  final bool automaticallyImplyLeading;
-
-  /// Background color of the app bar
+  /// Shown when [titleWidget] is null. Can be empty when [titleWidget] is set.
+  final String title;
+  final bool enableContextualActionBar;
   final Color? backgroundColor;
+  final Color? foregroundColor;
 
-  /// Elevation of the app bar
-  final double? elevation;
+  /// Title color. Defaults to [foregroundColor], then the app bar theme's
+  /// foreground color, then [ColorScheme.onSurface].
+  final Color? textColor;
+  final double fontSize;
+  final FontWeight fontWeight;
 
-  /// Flexible space widget (e.g., for gradients or custom backgrounds)
-  final Widget? flexibleSpace;
-
-  /// Whether to use platform-specific styling
-  final bool usePlatformStyle;
-
-  /// Padding around the title
-  final EdgeInsets? titlePadding;
-
-  /// Whether to center the title
+  /// When true, a long [title] is clipped to [titleMaxLines] (default 2) with
+  /// a [readMoreLabel] / [readLessLabel] toggle.
+  final bool? titleReadMore;
+  final int? titleMaxLines;
   final bool centerTitle;
-
-  /// Height of the app bar
+  final double elevation;
+  final double? scrolledUnderElevation;
+  final Color? surfaceTintColor;
+  final List<Widget>? actions;
+  final Widget? leading;
+  final bool automaticallyImplyLeading;
+  final Widget? titleWidget;
+  final PreferredSizeWidget? bottom;
   final double? toolbarHeight;
+  final SystemUiOverlayStyle? systemOverlayStyle;
+  final void Function()? onSelect;
+  final void Function()? onClosed;
+  final String contextualSelectLabel;
+
+  /// Color of the contextual "Select" action. Defaults to `#2196F3`.
+  final Color? contextualSelectColor;
+  final Color? closeIconColor;
+
+  /// When non-null, renders a trailing info icon next to the [title] that calls
+  /// this callback on tap (entire title+icon row becomes tappable). Ignored if
+  /// [titleWidget] is provided.
+  final VoidCallback? onInfoTap;
+
+  /// Icon to show when [onInfoTap] is set. Defaults to
+  /// [Icons.info_outline_rounded].
+  final IconData? infoIcon;
+
+  /// Color for the info icon. Defaults to `theme.colorScheme.primary`.
+  final Color? infoIconColor;
+
+  /// Size for the info icon on mobile. Defaults to `20`.
+  final double infoIconSize;
+
+  /// Size for the info icon on tablet form factors. Defaults to `24` so the
+  /// target is easier to hit on larger screens.
+  final double infoIconSizeTablet;
+
+  /// Toggle label shown while a [titleReadMore] title is collapsed.
+  final String readMoreLabel;
+
+  /// Toggle label shown while a [titleReadMore] title is expanded.
+  final String readLessLabel;
 
   const CommonAppBar({
     super.key,
-    this.title,
-    this.titleWidget,
-    this.leadingIcon,
-    this.onLeadingPressed,
-    this.actions,
-    this.automaticallyImplyLeading = true,
+    this.title = '',
+    this.enableContextualActionBar = false,
     this.backgroundColor,
-    this.elevation,
-    this.flexibleSpace,
-    this.usePlatformStyle = true,
-    this.titlePadding,
+    this.foregroundColor,
+    this.textColor,
+    this.fontSize = 20.0,
+    this.fontWeight = FontWeight.w600,
+    this.titleReadMore,
+    this.titleMaxLines,
     this.centerTitle = true,
+    this.elevation = 0,
+    this.scrolledUnderElevation = 0,
+    this.surfaceTintColor,
+    this.actions,
+    this.leading,
+    this.automaticallyImplyLeading = true,
+    this.titleWidget,
+    this.bottom,
     this.toolbarHeight,
+    this.systemOverlayStyle,
+    this.onSelect,
+    this.onClosed,
+    this.contextualSelectLabel = 'Select',
+    this.contextualSelectColor,
+    this.closeIconColor,
+    this.onInfoTap,
+    this.infoIcon,
+    this.infoIconColor,
+    this.infoIconSize = 20,
+    this.infoIconSizeTablet = 24,
+    this.readMoreLabel = 'More Info',
+    this.readLessLabel = 'Less Info',
   });
 
   @override
   Widget build(BuildContext context) {
-    final isIOS =
-        usePlatformStyle && Theme.of(context).platform == TargetPlatform.iOS;
+    final theme = Theme.of(context);
+    final resolvedTextColor =
+        textColor ??
+        foregroundColor ??
+        theme.appBarTheme.foregroundColor ??
+        theme.colorScheme.onSurface;
 
-    if (isIOS) {
-      return _buildCupertinoAppBar(context);
-    } else {
-      return _buildMaterialAppBar(context);
+    final Widget resolvedTitle =
+        titleWidget ??
+        _buildTitle(
+          context: context,
+          theme: theme,
+          textColor: resolvedTextColor,
+        );
+
+    if (enableContextualActionBar) {
+      assert(
+        title.isNotEmpty || titleWidget != null,
+        'Contextual bar needs a title or titleWidget',
+      );
+      return AppBar(
+        elevation: elevation,
+        scrolledUnderElevation: scrolledUnderElevation,
+        centerTitle: centerTitle,
+        backgroundColor: backgroundColor,
+        foregroundColor: foregroundColor,
+        surfaceTintColor: surfaceTintColor,
+        toolbarHeight: toolbarHeight,
+        systemOverlayStyle: systemOverlayStyle,
+        automaticallyImplyLeading: false,
+        bottom: bottom,
+        leading:
+            leading ??
+            IconButton(
+              icon: Icon(Icons.close, color: closeIconColor),
+              iconSize: 24,
+              onPressed: onClosed,
+            ),
+        title: resolvedTitle,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 12.0),
+            child: TextButton(
+              onPressed: onSelect,
+              style: TextButton.styleFrom(
+                foregroundColor:
+                    contextualSelectColor ?? _kContextualSelectColor,
+                textStyle: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+              child: Text(contextualSelectLabel),
+            ),
+          ),
+        ],
+      );
     }
-  }
 
-  /// Builds a Material Design app bar
-  PreferredSizeWidget _buildMaterialAppBar(BuildContext context) {
+    assert(
+      title.isNotEmpty || titleWidget != null,
+      'CommonAppBar: set title, or use titleWidget',
+    );
     return AppBar(
-      title: titleWidget ?? (title != null ? Text(title!) : null),
-      leading: leadingIcon != null
-          ? IconButton(icon: Icon(leadingIcon), onPressed: onLeadingPressed)
-          : null,
-      automaticallyImplyLeading: automaticallyImplyLeading,
-      actions: actions,
-      backgroundColor:
-          backgroundColor ?? Theme.of(context).appBarTheme.backgroundColor,
-      elevation: elevation ?? 4.0,
-      flexibleSpace: flexibleSpace,
-      // titlePadding: titlePadding,
+      elevation: elevation,
+      scrolledUnderElevation: scrolledUnderElevation,
       centerTitle: centerTitle,
+      backgroundColor: backgroundColor,
+      foregroundColor: foregroundColor,
+      surfaceTintColor: surfaceTintColor,
       toolbarHeight: toolbarHeight,
+      systemOverlayStyle: systemOverlayStyle,
+      automaticallyImplyLeading: automaticallyImplyLeading,
+      title: resolvedTitle,
+      actions: actions,
+      leading: leading,
+      bottom: bottom,
     );
   }
 
-  /// Builds a Cupertino-style app bar
-  PreferredSizeWidget _buildCupertinoAppBar(BuildContext context) {
-    return CupertinoNavigationBar(
-      middle: titleWidget ?? (title != null ? Text(title!) : null),
-      leading: leadingIcon != null
-          ? CupertinoButton(
-              padding: EdgeInsets.zero,
-              onPressed: onLeadingPressed,
-              child: Icon(leadingIcon),
-            )
-          : null,
-      trailing: actions != null ? Row(children: actions!) : null,
-      backgroundColor:
-          backgroundColor ?? CupertinoTheme.of(context).barBackgroundColor,
-      border: Border(bottom: BorderSide(color: Colors.grey[300]!)),
+  Widget _buildTitle({
+    required BuildContext context,
+    required ThemeData theme,
+    required Color textColor,
+  }) {
+    final TextStyle? style = theme.textTheme.titleLarge?.copyWith(
+      fontSize: fontSize,
+      fontWeight: fontWeight,
+      color: textColor,
+    );
+
+    final Widget titleText = titleReadMore == true
+        ? _ReadMoreTitle(
+            text: title,
+            style: style,
+            maxLines: titleMaxLines ?? 2,
+            moreLabel: readMoreLabel,
+            lessLabel: readLessLabel,
+            toggleColor: textColor,
+          )
+        : Text(
+            title,
+            style: style,
+            maxLines: titleMaxLines,
+            overflow: titleMaxLines != null ? TextOverflow.ellipsis : null,
+          );
+
+    if (onInfoTap == null) return titleText;
+
+    return GestureDetector(
+      onTap: onInfoTap,
+      behavior: HitTestBehavior.opaque,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Flexible(child: titleText),
+          const SizedBox(width: 8),
+          Icon(
+            infoIcon ?? Icons.info_outline_rounded,
+            size: _isTabletFormFactor(MediaQuery.sizeOf(context))
+                ? infoIconSizeTablet
+                : infoIconSize,
+            color: infoIconColor ?? theme.colorScheme.primary,
+          ),
+        ],
+      ),
     );
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(toolbarHeight ?? kToolbarHeight);
+  Size get preferredSize {
+    final h =
+        (toolbarHeight ?? kToolbarHeight) + (bottom?.preferredSize.height ?? 0);
+    return Size.fromHeight(h);
+  }
+}
+
+/// A plain-text title clipped to [maxLines] with a toggle when it overflows.
+class _ReadMoreTitle extends StatefulWidget {
+  const _ReadMoreTitle({
+    required this.text,
+    required this.style,
+    required this.maxLines,
+    required this.moreLabel,
+    required this.lessLabel,
+    required this.toggleColor,
+  });
+
+  final String text;
+  final TextStyle? style;
+  final int maxLines;
+  final String moreLabel;
+  final String lessLabel;
+  final Color toggleColor;
+
+  @override
+  State<_ReadMoreTitle> createState() => _ReadMoreTitleState();
+}
+
+class _ReadMoreTitleState extends State<_ReadMoreTitle> {
+  bool _isExpanded = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final painter = TextPainter(
+          text: TextSpan(
+            text: widget.text,
+            style: DefaultTextStyle.of(context).style.merge(widget.style),
+          ),
+          maxLines: widget.maxLines,
+          textDirection: Directionality.of(context),
+          textScaler: MediaQuery.textScalerOf(context),
+        )..layout(maxWidth: constraints.maxWidth);
+        final overflows = painter.didExceedMaxLines;
+        painter.dispose();
+
+        final text = Text(
+          widget.text,
+          style: widget.style,
+          maxLines: _isExpanded ? null : widget.maxLines,
+          overflow: _isExpanded ? null : TextOverflow.clip,
+        );
+        if (!overflows) return text;
+
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Flexible(child: text),
+            GestureDetector(
+              onTap: () => setState(() => _isExpanded = !_isExpanded),
+              behavior: HitTestBehavior.opaque,
+              child: Text(
+                _isExpanded ? widget.lessLabel : widget.moreLabel,
+                style: TextStyle(
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.w700,
+                  color: widget.toggleColor,
+                  decoration: TextDecoration.underline,
+                  decorationColor: widget.toggleColor,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+const double _kDesktopBreakpoint = 950;
+const double _kTabletBreakpoint = 600;
+const double _kTabletFormFactorMaxShortestSide = 1024;
+
+/// Tablet buckets plus large iPads that width rules classify as desktop.
+bool _isTabletFormFactor(Size size) {
+  final double width;
+  if (kIsWeb) {
+    width = size.width;
+  } else {
+    switch (defaultTargetPlatform) {
+      case TargetPlatform.macOS:
+      case TargetPlatform.windows:
+      case TargetPlatform.linux:
+        width = size.width;
+      default:
+        width = size.shortestSide;
+    }
+  }
+  if (width >= _kDesktopBreakpoint) {
+    return size.shortestSide <= _kTabletFormFactorMaxShortestSide;
+  }
+  return width >= _kTabletBreakpoint;
 }
